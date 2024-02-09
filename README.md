@@ -1,9 +1,10 @@
 # FastGlioma: visual foundation models for fast, label-free detection of diffuse glioma infiltration
 
-[**Preprint**](https://arxiv.org/abs/2303.01605) /
-[**Demo**](https://fastglioma.mlins.org) /
+[**Preprint**](https://arxiv.org) /
+[**Interactive Demo**](https://fastglioma.mlins.org) /
+[**Models**](https://huggingface.co) /
 [**MLiNS Lab**](https://mlins.org)
-
+ 
 Code repository for our paper 'Visual foundation models for fast, label-free detection of diffuse glioma infiltration.' We employ a foundational model training strategy to predict the degree of diffuse glioma infiltration intraoperatively using stimulated Raman histology and deep learning.
 
 ## Abstract
@@ -21,10 +22,16 @@ A critical challenge in diffuse glioma treatment is detecting tumor infiltration
 **FastGlioma workflow.** A patient with a suspected diffuse glioma undergoes surgical resection. During tumor resection, the surgeon samples
 tissue from the surgical margin. The portable SRH imaging system acquires microscopic images in the operating room, performed by a single technician
 using simple touchscreen instructions. A freshly excised surgical specimen is loaded directly into a custom microscope slide and inserted into the SRH
-imager without the need for tissue processing. Additional details on image acquisition can be found in Extended Data Fig. 1. SRH images can be virtually
+imager without the need for tissue processing. SRH images can be virtually
 stained using an H&E-like colorscheme for clinician review as shown above. A whole slide SRH image is divided into patches and each patch undergoes
-a feedforward pass through a patch tokenizer (Extended Data Fig. 3). The patch tokens, plus an appended classification token <CLS>, are then input into
+a feedforward pass through a patch tokenizer. The patch tokens, plus an appended classification token <CLS>, are then input into
 a whole slide SRH encoder that is a vision transformer. The patch tokenizer and whole slide encoder are pretrained as a visual foundation model using
-large-scale self-supervision (Extended Data Fig. 4). For tumor infiltration scoring, a slide scorer layer is fine-tuned to output a normalized score between
-0-1 that predicts the degree of tumor infiltration within the whole slide image (Extended Data Fig. 2 and 5). Additionally, FastGlioma provides real-time
+large-scale self-supervision. For tumor infiltration scoring, a slide scorer layer is fine-tuned to output a normalized score between
+0-1 that predicts the degree of tumor infiltration within the whole slide image. Additionally, FastGlioma provides real-time
 regional or field-of-view interpretability by identifying areas of high tumor infiltration within whole slide images.
+
+© This code is made available for academic purposes. Imaging and clinical information for this project was collected with IRB approval (HUM00083059) and is protected under HIPAA. Representative images and predictions can be found at [**fastglioma.mlins.org**](https://fastglioma.mlins.org).
+
+## License Information
+The code is licensed under the MIT License.
+See LICENSE for license information and third party notices.
