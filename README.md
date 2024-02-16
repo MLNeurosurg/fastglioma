@@ -29,7 +29,7 @@ A critical challenge in diffuse glioma treatment is detecting tumor infiltration
     ```
 4. Activate conda environment
     ```console
-    conda activate hidisc
+    conda activate fastglioma
     ```
 5. Install package and dependencies
     ```console
