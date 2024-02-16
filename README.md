@@ -15,6 +15,44 @@ A critical challenge in diffuse glioma treatment is detecting tumor infiltration
 
 *Image tumor with **SRH** >> Images in >> **FastGlioma** >> Degree of tumor infiltration out* (end-to-end: ~10 seconds)
 
+## Installation
+
+1. Clone FastGlioma github repo
+   ```console
+   git clone git@github.com:MLNeurosurg/fastglioma.git
+   ```
+2. Install miniconda: follow instructions
+    [here](https://docs.conda.io/en/latest/miniconda.html)
+3. Create conda environment
+    ```console
+    conda create -n hidisc python=3.9
+    ```
+4. Activate conda environment
+    ```console
+    conda activate hidisc
+    ```
+5. Install package and dependencies
+    ```console
+    <cd /path/to/fastglioma/repo/dir>
+    pip install -e .
+    ```
+
+## Directory organization
+```
+fastglioma/
+├── fastglioma/         # library for FastGlioma training
+│   ├── datasets/       # PyTorch datasets
+│   ├── losses/         # FastGlioma loss functions with contrastive/ordinal metric learning
+│   ├── models/         # PyTorch models for training and evaluation
+│   └── train/          # Training and evaluation scripts
+│       └── config/     # Configuration files used for training
+├── figures/            # Figures in the README file
+├── README.md
+├── setup.py            # Setup file including list of dependencies
+├── LICENSE             # MIT license for the repo
+└── THIRD_PARTY         # License information for third party code
+```
+
 # Overview
 
 ![Overview](/figures/Figure_1.png)
@@ -34,7 +72,7 @@ regional or field-of-view interpretability by identifying areas of high tumor in
 
 ![Results](/figures/Figure_2.png)
 
-**FastGlioma performance.** Prediction results for the full prospective, international, multicenter testing cohort of diffuse gliomas
+**FastGlioma performance.** a, Prediction results for the full prospective, international, multicenter testing cohort of diffuse gliomas
 patients (n = 220) are shown. ROC curves show average performance for predicting four levels of tumor infiltration. SRH foundation model pretraining showed strong prediction performance without fine-tuning. FastGlioma that included fine-tuning with ordinal metric learning had a 3.2% increase in overall performance. b, Boxplots of FastGlioma infiltration scores by ground truth value are shown. Scores had strong correlation with ground truth ordinal scores (ρ = 0.77 95% confidence interval 0.74-0.78). c, FastGlioma performance on full resolution versus
 low resolution SRH images is shown. FastGlioma allows for 10X increase in imaging speed with minimal performance tradeoff. d, Whole slide SRH
 representations are plotted on a linear discriminant axis. FastGlioma learned representations that rank whole slide SRH images on a near-linear tumor
