@@ -1,8 +1,8 @@
 # FastGlioma: visual foundation models for fast, label-free detection of diffuse glioma infiltration
 
-[**Preprint**](https://arxiv.org) /
+**Preprint** (coming soon!) /
 [**Interactive Demo**](https://fastglioma.mlins.org) /
-[**Models**](https://huggingface.co) /
+**Models** (coming soon!) /
 [**MLiNS Lab**](https://mlins.org)
  
 Code repository for our paper 'Visual foundation models for fast, label-free detection of diffuse glioma infiltration.' We employ a foundational model training strategy to predict the degree of diffuse glioma infiltration intraoperatively using stimulated Raman histology and deep learning.
@@ -25,7 +25,7 @@ A critical challenge in diffuse glioma treatment is detecting tumor infiltration
     [here](https://docs.conda.io/en/latest/miniconda.html)
 3. Create conda environment
     ```console
-    conda create -n hidisc python=3.9
+    conda create -n fastglioma python=3.9
     ```
 4. Activate conda environment
     ```console
