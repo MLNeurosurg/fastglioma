@@ -56,7 +56,7 @@ class FastGliomaSystem(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         pred = self.forward(batch)
-        loss = self.criterion(output["logits"], batch["label"])
+        loss = self.criterion(pred["logits"], batch["label"])
         bs = batch["image"][0].shape[0] * torch.cuda.device_count()
 
         self.log("train/ordmet",
@@ -70,7 +70,7 @@ class FastGliomaSystem(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         pred = self.forward(batch)
-        loss = self.criterion(output["logits"], batch["label"])
+        loss = self.criterion(pred["logits"], batch["label"])
         bs = batch["image"][0].shape[0] * torch.cuda.device_count()
 
         self.log("val/ordmet",
