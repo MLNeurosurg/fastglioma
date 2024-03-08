@@ -13,7 +13,7 @@ A critical challenge in diffuse glioma treatment is detecting tumor infiltration
 
 ## TL;DR
 
-*Image tumor with **SRH** >> Images in >> **FastGlioma** >> Degree of tumor infiltration out* (end-to-end: ~10 seconds)
+*Image tumor with **Fast SRH** >> **FastGlioma** >> Degree of tumor infiltration out* (end-to-end: ~10 seconds)
 
 ## Installation
 
