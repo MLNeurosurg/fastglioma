@@ -1,6 +1,6 @@
 # FastGlioma: visual foundation models for fast, label-free detection of diffuse glioma infiltration
 
-**Preprint** (coming soon!) /
+[**Preprint**](https://www.researchsquare.com/article/rs-4033133/v1) /
 [**Interactive Demo**](https://fastglioma.mlins.org) /
 **Models** (coming soon!) /
 [**MLiNS Lab**](https://mlins.org)
