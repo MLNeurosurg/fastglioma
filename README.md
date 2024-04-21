@@ -11,6 +11,15 @@ Code repository for our paper 'Visual foundation models for fast, label-free det
 
 A critical challenge in diffuse glioma treatment is detecting tumor infiltration during surgery to achieve safe maximal resection. Unfortunately, safely resectable residual tumor is found in the majority of glioma patients after surgery, leading to early recurrence and decreased patient survival. We present **FastGlioma**, a visual foundation model for fast (<10 seconds) and accurate detection of glioma infiltration in fresh, unprocessed surgical tissue. FastGlioma was pretrained using large-scale self-supervision (~4 million images) on rapid, label-free, optical microscopy, and fine-tuned to output a normalized score that indicates the degree of tumor infiltration within whole slide optical images. In a prospective, multicenter, international testing cohort of diffuse glioma patients (n=220), FastGlioma was able to detect and quantify the degree of tumor infiltration with an average area under the ROC curve of 92.1 &pm; 0.9\%. FastGlioma outperformed image-guided and fluorescence-guided adjuncts for detecting tumor infiltration during surgery by a wide margin in a head-to-head, prospective comparison study. FastGlioma performance remained high across diverse patient demographics, medical centers, and diffuse glioma subtypes as defined by the World Health Organization (WHO). FastGlioma shows zero-shot generalization to other adult and pediatric brain tumor diagnoses, demonstrating that our visual foundation model can serve as a general-purpose adjunct for guiding brain tumor surgeries. These findings represent the transformative potential of medical foundation models to unlock the role of artificial intelligence in the care of cancer patients.
 
+
+## Intended Use
+*FastGlioma is for investigational use only*. FastGlioma is intended for patients who have adult-type diffuse gliomas as defined by the World Health Organization (WHO). These include:
+  1) Astrocytoma, IDH-mutant
+  2) Oligodendroglioma, IDH-mutant, and 1p/19q-codeleted
+  3) Glioblastoma, IDH-wildtype
+Study neurosurgeons were allowed to include patients based on (1) a previous pathologic diagnosis of adult-type diffuse glioma or (2) high likelihood of adult-type diffuse glioma diagnosis based on clinical presentation and radiographic features. Intraoperative pathologic diagnosis via frozen sectioning or SRH imaging was completed in the majority of patients to provide further preliminary evidence of diffuse glioma diagnosis prior to margin sampling for FastGlioma. While our preliminary data show good zero-shot performance on a variety of other tumors and clinical settings, FastGlioma is **not** intended for surgical resection guidance around eloquent cortical or subcortical structures, pediatric patients, non-primary brain tumors, or non-neoplastic pathologic tissue.
+
+
 ## TL;DR
 
 *Image tumor with **Fast SRH** >> **FastGlioma** >> Degree of tumor infiltration out* (end-to-end: ~10 seconds)
