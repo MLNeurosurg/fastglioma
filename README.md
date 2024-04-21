@@ -14,9 +14,13 @@ A critical challenge in diffuse glioma treatment is detecting tumor infiltration
 
 ## Intended Use
 *FastGlioma is for investigational use only*. FastGlioma is intended for patients who have adult-type diffuse gliomas as defined by the World Health Organization (WHO). These include:
-  1) Astrocytoma, IDH-mutant
-  2) Oligodendroglioma, IDH-mutant, and 1p/19q-codeleted
-  3) Glioblastoma, IDH-wildtype
+
+  1. Astrocytoma, IDH-mutant
+  
+  2. Oligodendroglioma, IDH-mutant, and 1p/19q-codeleted
+  
+  3. Glioblastoma, IDH-wildtype
+  
 Study neurosurgeons were allowed to include patients based on (1) a previous pathologic diagnosis of adult-type diffuse glioma or (2) high likelihood of adult-type diffuse glioma diagnosis based on clinical presentation and radiographic features. Intraoperative pathologic diagnosis via frozen sectioning or SRH imaging was completed in the majority of patients to provide further preliminary evidence of diffuse glioma diagnosis prior to margin sampling for FastGlioma. While our preliminary data show good zero-shot performance on a variety of other tumors and clinical settings, FastGlioma is **not** intended for surgical resection guidance around eloquent cortical or subcortical structures, pediatric patients, non-primary brain tumors, or non-neoplastic pathologic tissue.
 
 
