@@ -23,6 +23,16 @@ A critical challenge in diffuse glioma treatment is detecting tumor infiltration
   
 Study neurosurgeons were allowed to include patients based on (1) a previous pathologic diagnosis of adult-type diffuse glioma or (2) high likelihood of adult-type diffuse glioma diagnosis based on clinical presentation and radiographic features. Intraoperative pathologic diagnosis via frozen sectioning or SRH imaging was completed in the majority of patients to provide further preliminary evidence of diffuse glioma diagnosis prior to margin sampling for FastGlioma. While our preliminary data show good zero-shot performance on a variety of other tumors and clinical settings, FastGlioma is **not** intended for surgical resection guidance around eloquent cortical or subcortical structures, pediatric patients, non-primary brain tumors, or non-neoplastic pathologic tissue.
 
+FastGlioma was trained using ordinal labels that correspond four increasing degrees of tumor infiltration: 0, 1, 2, or 3. However, because tumor infiltration is a continuous variable, FastGlioma outputs a continuous normalized score between 0-1 to indicate the degree of tumor infilration. Based on training and testing results, we recommend guidelines regarding FastGlioma scores:
+
+| Pathologists Score | FastGlioma range | Interpretation |
+|----------|----------|----------|
+| Score 0 | 0-25% | Normal or non-neoplastic tissue |
+| Score 1 | 26-50% | Atypical cells, cannot rule out tumor |
+| Score 2 | 51-85% | Sparse tumor infiltration |
+| Score 3 | 86-100% | Dense tumor infiltration |
+
+Please note that the nontumor-tumor threshold corresponds to a FastGlioma score of 50%. We hope to provide surgeon's with real-time, accurate, and clinically actionable diagnostic information. Ultimately, the decision to resect additional tissue we leave to the operating surgeon and the clinical context.
 
 ## TL;DR
 
