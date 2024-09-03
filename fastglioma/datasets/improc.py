@@ -1,7 +1,5 @@
 """Image processing functions designed to work with OpenSRH datasets.
 
-Adapted from MLNeurosurg/hidisc.
-
 Copyright (c) 2024 University of Michigan. All rights reserved.
 Licensed under the MIT License. See LICENSE for license information.
 """
@@ -14,6 +12,7 @@ import tifffile
 import numpy as np
 
 import torch
+from torchvision.transforms import functional as F
 from torch.nn import ModuleList
 from torchvision.transforms import (
     Normalize, RandomApply, Compose, RandomHorizontalFlip, RandomVerticalFlip,
@@ -107,6 +106,27 @@ class GaussianNoise(torch.nn.Module):
         return noisy
 
 
+# Strong augmentation modules
+class InpaintRows(torch.nn.Module):
+
+    def __init__(self, y_skip: int = 2, image_size: int = 300):
+        self.y_skip = y_skip
+        self.image_size = image_size
+
+    def __call__(self, img):
+        self.original_y = img.shape[1]
+        mask = np.arange(0, self.original_y, self.y_skip)
+        img_trans = img[:, mask, :]
+        img_trans = Resize(
+            size=(self.image_size, self.image_size),
+            interpolation=F.InterpolationMode.BILINEAR,
+            antialias=True)(img_trans)
+        return img_trans
+
+    def __repr__(self):
+        return self.__class__.__name__ + '()'
+
+
 def process_read_im(imp: str) -> torch.Tensor:
     """Read in two channel image
 
@@ -123,7 +143,7 @@ def process_read_im(imp: str) -> torch.Tensor:
 
 
 # helpers
-def get_srh_base_aug(base_aug: str = "three_channels") -> List:
+def get_srh_base_aug(base_aug: str = "three_channels", y_skip: int = 0) -> List:
     """Base processing augmentations for all SRH images
 
     Args:
@@ -135,7 +155,11 @@ def get_srh_base_aug(base_aug: str = "three_channels") -> List:
     u16_min = (0, 0)
     u16_max = (65536, 65536)  # 2^16
 
-    xform_list = [Normalize(mean=u16_min, std=u16_max), GetThirdChannel(mode=base_aug), MinMaxChop()]
+    if y_skip != 0:
+        xform_list = [Normalize(mean=u16_min, std=u16_max), GetThirdChannel(mode=base_aug), MinMaxChop(), InpaintRows(y_skip=y_skip)]
+    else:
+        xform_list = [Normalize(mean=u16_min, std=u16_max), GetThirdChannel(mode=base_aug), MinMaxChop()]
+
     return xform_list
 
 
