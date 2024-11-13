@@ -1,0 +1,57 @@
+infra:
+    log_dir: /nfs/turbo/umms-tocho-snr/exp/akhilk/ # where all the experiments are
+    exp_name: fastglioma_github/ # create a subdirectory for each set of experiments
+    comment: scm_vicreg_dev # can use this to customize for each experiment
+    seed: 1000
+data:
+    db_root: /nfs/turbo/umms-tocho/data/opensrh/
+    embedding_root: /scratch/tocho_root/tocho0/shared_data/emb_data_fg_dev/
+    train_augmentation:
+        - which: random_splitting
+          params:
+              masking_ratio: [0.7, 0.3]
+        - which: random_cropping
+          params:
+              masking_size_ranges: [[100, 200], [50, 150]]
+              masking_aspect_ratio_range: [[0.5, 2], [0.5, 2]]
+        - which: random_masking
+          params:
+              masking_ratio_ranges: [[0.1, 0.8], [0.1, 0.8]]
+    valid_augmentation: same
+    tag: [hidisc]
+    rand_aug_prob: 1.
+    num_transforms: 2
+    balance_study_per_class: false
+model:
+    backbone: 
+        which: transformer
+        params:
+            embed_dim: 512
+            depth: 2
+            num_heads: 4
+            pos_emb_type: FFPEG
+            pos_emb_grad: True
+            prefix_len: 8
+    mlp_hidden: [512]
+    num_embedding_out: 128
+training:
+    objective:
+        which: vicreg
+        params:
+            std_coeff: 10. 
+            sim_coeff: 10.
+            cov_coeff: 1.
+            epsilon: 1.0e-4
+    batch_size: 4
+    num_epochs: 40000
+    optimizer: adamw # [sgd, adam, adamw]
+    learn_rate: 3.0e-4
+    scheduler:
+        which: cos_warmup
+        params:
+            num_warmup_steps: 0.1
+            num_cycles: 0.5
+    imagenet_backbone_checkpoint: null
+    eval_ckpt_ep_freq: 1
+    amp: 32
+    deterministic: false
