@@ -53,7 +53,7 @@ Please note that the nontumor-tumor threshold corresponds to a FastGlioma score 
 
 # Training, evaluation, and inference
 
-This repository currently supports inference on the [OpenSRH dataset](https://opensrh.mlins.org/), the largest publically available stimulated Raman histology dataset, with FastGlioma models available on [HuggingFace](https://huggingface.co/mlinslab/fastglioma/). Training/evaluation scripts will be released soon.
+This repository currently supports inference on the [OpenSRH dataset](https://opensrh.mlins.org/), the largest publically available stimulated Raman histology dataset, with FastGlioma models available on [HuggingFace](https://huggingface.co/mlinslab/fastglioma/). Training/evaluation scripts are available in their respective directories.
 
 ## Directory organization
 ```
@@ -63,8 +63,9 @@ fastglioma/
 │   ├── losses/         # FastGlioma loss functions with contrastive/ordinal metric learning
 │   ├── models/         # PyTorch models for training, evaluation, and inference
 │   ├── utils/          # Utility functions
+│   ├── training/       # Training scripts
+│   ├── eval/           # Evaluation scripts
 │   ├── inference/      # Inference scripts
-│       └── config/     # Configuration files used for inference
 ├── figures/            # Figures in the README file
 ├── THIRD_PARTY         # License information for third party code   
 ├── setup.py            # Setup file including list of dependencies
