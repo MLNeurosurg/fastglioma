@@ -1,0 +1,80 @@
+infra:
+    log_dir: ./ # where all the experiments are
+    exp_name: fastglioma/ # create a subdirectory for each set of experiments
+    comment: patient_disc_dev # can use this to customize for each experiment
+    seed: 1000
+data:
+    db_root: /nfs/turbo/umms-tocho/data/opensrh/
+    train_augmentation:
+        - which: inpaint_rows
+          params: 
+            image_size: 300
+            y_skip: 5
+        - which: random_horiz_flip
+          params: {}
+        - which: random_vert_flip
+          params: {}
+        - which: gaussian_noise
+          params: {}
+        - which: color_jitter
+          params: {}
+        - which: random_autocontrast
+          params: {}
+        - which: random_solarize
+          params:
+            threshold: 0.2
+        - which: random_sharpness
+          params:
+            sharpness_factor: 2
+        - which: gaussian_blur
+          params:
+            kernel_size: 5
+            sigma: 1
+        - which: random_affine
+          params:
+            degrees: 10
+            translate: [0.1, 0.3]
+        - which: random_resized_crop
+          params:
+            size: 300
+        - which: random_erasing
+          params: {}
+    valid_augmentation: same
+    srh_base_augmentation: three_channels #ch2_only
+    rand_aug_prob: 0.3
+    hidisc:
+        num_slide_samples: 2
+        num_patch_samples: 2
+        num_transforms: 2
+    balance_study_per_class: true
+model:
+    backbone: 
+        which: resnet34
+        params:
+            num_channel_in: 3
+    mlp_hidden: []
+    num_embedding_out: 128
+training:
+    objective:
+        which: hidisc
+        params:
+            lambda_patient: 1.0
+            lambda_slide: 1.0
+            lambda_patch: 1.0
+            supcon_params:
+                temperature: 0.07
+                base_temperature: 0.07
+                contrast_mode: all
+    batch_size: 128
+    num_epochs: 40000
+    optimizer: adamw # [sgd, adam, adamw]
+    learn_rate: 1.0e-3
+    scheduler:
+        which: cos_warmup
+        params:
+            num_warmup_steps: 0.1
+            num_cycles: 0.5
+    imagenet_backbone_checkpoint: null
+    eval_ckpt_ep_freq: 400
+    amp: 32
+    deterministic: false
