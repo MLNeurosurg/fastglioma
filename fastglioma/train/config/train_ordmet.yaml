@@ -1,0 +1,57 @@
+infra:
+    log_dir: ./ # where all the experiments are
+    exp_name: fastglioma/ # create a subdirectory for each set of experiments
+    comment: ordmet_dev # can use this to customize for each experiment
+    seed: 1000
+data:
+    db_root: /path/to/opensrh/
+    embedding_root: /path/to/embeddings/
+    meta_fname: opensrh_withslideclass.json
+    use_patient_class: false
+    train_augmentation:
+        - which: random_splitting
+          params:
+              masking_ratio: [0.7, 0.3]
+        - which: random_cropping
+          params:
+              masking_size_ranges: [[100, 200], [50, 150]]
+              masking_aspect_ratio_range: [[0.5, 2], [0.5, 2]]
+        - which: random_masking
+          params:
+              masking_ratio_ranges: [[0.1, 0.8], [0.1, 0.8]]
+    valid_augmentation: []
+    tag: [tag1, tag2, tag3]
+    rand_aug_prob: 1.
+    num_transforms: 2
+    balance_study_per_class: false
+model:
+    backbone: 
+        which: transformer
+        params:
+            embed_dim: 512
+            depth: 2
+            num_heads: 4
+            pos_emb_type: FFPEG
+            pos_emb_grad: True
+            prefix_len: 8
+    mlp_hidden: [512]
+training:
+    load_backbone:
+        ckpt_path: /path/to/pretrained/ckpt
+        finetune: false
+    objective:
+        which: ordmet
+        params: {}
+    batch_size: 16
+    num_epochs: 40000
+    optimizer: adamw # [sgd, adam, adamw]
+    learn_rate: 0.0000188
+    scheduler:
+        which: cos_warmup
+        params:
+            num_warmup_steps: 0.1
+            num_cycles: 0.5
+    imagenet_backbone_checkpoint: null
+    eval_ckpt_ep_freq: 400
+    amp: 32
+    deterministic: false
