@@ -6,7 +6,7 @@ infra:
     seed: 1000
 data:
     db_root: /path/to/opensrh/
-    studies: ["NIO_001"] #val # or specify studies (e.g., ["NIO_001", "NIO_004"])
+    studies: ["NIO_001"] # val or specify studies (e.g., ["NIO_001", "NIO_004"])
     patch_input: highres # {highres, lowres}
     use_patient_class: true # whether to use patient or slide class for inference
 model:

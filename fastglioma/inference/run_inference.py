@@ -10,6 +10,7 @@ from shutil import copy2
 from functools import partial
 from typing import List, Union, Dict, Any
 
+import gzip
 import yaml
 import numpy as np
 import pandas as pd
@@ -21,7 +22,7 @@ from torchvision.transforms import Compose
 import pytorch_lightning as pl
 
 from fastglioma.datasets.srh_dataset import SlideDataset, slide_collate_fn
-from fastglioma.datasets.improc import get_srh_base_aug
+from fastglioma.datasets.improc import get_srh_base_aug, get_strong_aug
 from fastglioma.utils.common import (parse_args, get_exp_name, config_loggers,
                                      get_num_worker)
 
@@ -88,13 +89,17 @@ def get_predictions(
         cf: Dict[str, Any],
         exp_root: str) -> Dict[str, Union[torch.Tensor, List[str]]]:
     """Run forward pass on the dataset, and generate embeddings and logits"""
+
+    def get_transform(cf):
+        return Compose(
+            get_srh_base_aug(base_aug=("three_channels" if cf["data"]["patch_input"] == "highres" else "ch2_only")) +
+            (get_strong_aug([{"which": "inpaint_rows_always_apply", "params": {"image_size": 300, "y_skip": 5}}], 1.) if cf["data"]["patch_input"] == "lowres" else [])
+        )
+
     dset = SlideDataset(
         data_root=cf["data"]["db_root"],
         studies=cf["data"]["studies"],
-        transform=Compose(
-            get_srh_base_aug(
-                base_aug=("three_channels" if cf["data"]["patch_input"] == "highres" else "ch2_only"), #yapf:disable
-                y_skip=(0 if cf["data"]["patch_input"] == "highres" else 5))), #yapf:disable
+        transform=get_transform(cf),
         balance_slide_per_class=False,
         use_patient_class=cf["data"]["use_patient_class"])
 
@@ -187,7 +192,8 @@ def main():
 
     logging.info("Generating predictions")
     predictions = get_predictions(cf, exp_root)
-    torch.save(predictions, os.path.join(pred_dir, "predictions.pt"))
+    with gzip.open(os.path.join(pred_dir, "predictions.pt.gz"), 'wb') as f:
+        torch.save(predictions, f)
 
 
 if __name__ == "__main__":
