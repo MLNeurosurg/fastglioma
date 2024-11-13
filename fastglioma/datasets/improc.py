@@ -4,7 +4,7 @@ Copyright (c) 2024 University of Michigan. All rights reserved.
 Licensed under the MIT License. See LICENSE for license information.
 """
 
-from typing import Optional, List, Tuple, Dict
+from typing import Optional, List, Tuple, Dict, Callable
 from functools import partial
 
 import random
@@ -70,7 +70,6 @@ class GetThirdChannel(torch.nn.Module):
         """
         Args:
             two_channel_image: a 2 channel np array in the shape H * W * 2
-            subtracted_base: an integer to be added to (CH3 - CH2)
 
         Returns:
             A 1 or 3 channel np array in the shape 3 * H * W
@@ -143,7 +142,7 @@ def process_read_im(imp: str) -> torch.Tensor:
 
 
 # helpers
-def get_srh_base_aug(base_aug: str = "three_channels", y_skip: int = 0) -> List:
+def get_srh_base_aug(base_aug: str = "three_channels") -> List:
     """Base processing augmentations for all SRH images
 
     Args:
@@ -155,10 +154,10 @@ def get_srh_base_aug(base_aug: str = "three_channels", y_skip: int = 0) -> List:
     u16_min = (0, 0)
     u16_max = (65536, 65536)  # 2^16
 
-    if y_skip != 0:
-        xform_list = [Normalize(mean=u16_min, std=u16_max), GetThirdChannel(mode=base_aug), MinMaxChop(), InpaintRows(y_skip=y_skip)]
-    else:
-        xform_list = [Normalize(mean=u16_min, std=u16_max), GetThirdChannel(mode=base_aug), MinMaxChop()]
+    # if y_skip != 0:
+    #     xform_list = [Normalize(mean=u16_min, std=u16_max), GetThirdChannel(mode=base_aug), MinMaxChop(), InpaintRows(y_skip=y_skip)]
+    # else:
+    xform_list = [Normalize(mean=u16_min, std=u16_max), GetThirdChannel(mode=base_aug), MinMaxChop()]
 
     return xform_list
 
@@ -170,6 +169,8 @@ def get_strong_aug(augs, rand_prob) -> List:
 
     callable_dict = {
         "resize": Resize,
+        "inpaint_rows_always_apply": InpaintRows,
+        "inpaint_rows": partial(rand_apply, which=InpaintRows),
         "random_horiz_flip": partial(RandomHorizontalFlip, p=rand_prob),
         "random_vert_flip": partial(RandomVerticalFlip, p=rand_prob),
         "gaussian_noise": partial(rand_apply, which=GaussianNoise),
@@ -187,6 +188,30 @@ def get_strong_aug(augs, rand_prob) -> List:
     return [callable_dict[a["which"]](**a["params"]) for a in augs]
 
 
-def get_srh_aug_list(augs, rand_prob=0.5) -> List:
+def get_srh_aug_list(augs, base_aug: str = "three_channels", rand_prob=0.5) -> List:
     """Combine base and strong augmentations for training"""
-    return get_srh_base_aug() + get_strong_aug(augs, rand_prob)
+    return get_srh_base_aug(base_aug=base_aug) + get_strong_aug(augs, rand_prob)
+
+
+def get_transformations(
+        cf: Optional[Dict] = None,
+        strong_aug: Callable = get_strong_aug) -> Tuple[Compose, Compose]:
+
+    if cf:
+        train_augs = cf["data"]["train_augmentation"]
+        val_augs = cf["data"]["valid_augmentation"]
+        base_aug = cf["data"]["srh_base_augmentation"]
+        aug_prob = cf["data"]["rand_aug_prob"]
+    else:
+        train_augs = []
+        val_augs = []
+        base_aug = "three_channels"
+        aug_prob = 0
+
+    if val_augs == "same":
+        val_augs = train_augs
+
+    train_xform = Compose(get_srh_aug_list(train_augs, base_aug=base_aug, rand_prob=aug_prob))
+    valid_xform = Compose(get_srh_aug_list(val_augs, base_aug=base_aug, rand_prob=aug_prob))
+
+    return train_xform, valid_xform
