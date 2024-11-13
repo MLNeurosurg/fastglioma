@@ -1,4 +1,4 @@
-"""Slide SSL with SCM/VICReg pretraining script.
+"""Slide-level training with ordmet script.
 
 Copyright (c) 2024 University of Michigan. All rights reserved.
 Licensed under the MIT License. See LICENSE for license information.
