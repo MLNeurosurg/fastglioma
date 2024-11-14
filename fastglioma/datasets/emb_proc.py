@@ -47,8 +47,6 @@ def get_emb_transformations(
         ModuleList([which(**kwargs)]), p=p)
 
     callable_dict = {
-        "k_random_region_partition_always_apply": NViewKRandomPartition,
-        "one_random_cropping_always_apply": NViewOneRandomCropping,
         "random_splitting": partial(rand_apply_p, NViewRandomSplitting),
         "random_masking": partial(rand_apply_p, NViewRandomMasking),
         "random_cropping": partial(rand_apply_p, NViewRandomCropping),
