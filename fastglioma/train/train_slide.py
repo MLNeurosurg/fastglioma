@@ -129,7 +129,7 @@ class SlideSSLSystem(pl.LightningModule):
 
     @torch.inference_mode()
     def predict_step(self, batch, batch_idx):
-        out = self.model(
+        out = self.model.bb(
             self.get_kth_view(batch["embeddings"], 0),
             coords=self.get_kth_view(batch["coords"], 0))
 
