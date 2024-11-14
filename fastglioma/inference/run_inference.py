@@ -10,7 +10,6 @@ from shutil import copy2
 from functools import partial
 from typing import List, Union, Dict, Any
 
-import gzip
 import yaml
 import numpy as np
 import pandas as pd
@@ -192,8 +191,7 @@ def main():
 
     logging.info("Generating predictions")
     predictions = get_predictions(cf, exp_root)
-    with gzip.open(os.path.join(pred_dir, "predictions.pt.gz"), 'wb') as f:
-        torch.save(predictions, f)
+    torch.save(predictions, os.path.join(pred_dir, "predictions.pt"))
 
 
 if __name__ == "__main__":
