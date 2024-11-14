@@ -45,7 +45,7 @@ training:
     batch_size: 16
     num_epochs: 40000
     optimizer: adamw # [sgd, adam, adamw]
-    learn_rate: 0.0000188
+    learn_rate: 0.00001875
     scheduler:
         which: cos_warmup
         params:

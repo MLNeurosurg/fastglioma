@@ -1,11 +1,11 @@
 infra:
-    log_dir: /nfs/turbo/umms-tocho-snr/exp/akhilk/ # where all the experiments are
-    exp_name: fastglioma_github/ # create a subdirectory for each set of experiments
+    log_dir: ./ # where all the experiments are
+    exp_name: fastglioma/ # create a subdirectory for each set of experiments
     comment: scm_vicreg_dev # can use this to customize for each experiment
     seed: 1000
 data:
-    db_root: /nfs/turbo/umms-tocho/data/opensrh/
-    embedding_root: /scratch/tocho_root/tocho0/shared_data/emb_data_fg_dev/
+    db_root: /path/to/opensrh/
+    embedding_root: /path/to/embeddings/
     train_augmentation:
         - which: random_splitting
           params:
@@ -18,7 +18,7 @@ data:
           params:
               masking_ratio_ranges: [[0.1, 0.8], [0.1, 0.8]]
     valid_augmentation: same
-    tag: [hidisc]
+    tag: [tag1, tag2, tag3] # specify embedding tags
     rand_aug_prob: 1.
     num_transforms: 2
     balance_study_per_class: false
