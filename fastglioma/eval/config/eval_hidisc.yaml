@@ -1,0 +1,30 @@
+infra:
+    log_dir: ./ # where all the experiments are
+    exp_name: fastglioma/ # use the same name as the training experiment
+    comment: patient_disc_dev # can use this to customize for each experiment
+    seed: 1000
+data:
+    db_root: /path/to/opensrh/
+    train_augmentation: # specify inpaint inrows for fastsrh
+        - which: inpaint_rows_always_apply
+          params: 
+            image_size: 300
+            y_skip: 5
+    valid_augmentation: same
+    srh_base_augmentation: ch2_only # specify srh base augmentation
+    rand_aug_prob: 1.
+model:
+    backbone:
+        which: resnet34
+        params:
+            num_channel_in: 3 # 3 if fullsrh, 1 if fastsrh
+    mlp_hidden: []
+    num_embedding_out: 128
+    train_alg: hidisc
+eval:
+    predict_batch_size: 128
+    knn:
+        batch_size: 1024
+        k: 200
+        t: 0.07
+    ckpt_path: relative/path/to/checkpoint.ckpt # eg. hash_datetime_expname_comment/models/ckpt-epochXX-accXXX.ckpt
