@@ -1,6 +1,6 @@
 # FastGlioma: foundation models for fast, label-free detection of glioma infiltration
 
-[**Preprint**](https://www.researchsquare.com/article/rs-4033133/v1) /
+[**Paper**](https://www.nature.com/articles/s41586-024-08169-3) /
 [**Interactive Demo**](https://fastglioma.mlins.org) /
 [**Models**](https://huggingface.co/mlinslab/fastglioma) /
 [**MLiNS Lab**](https://mlins.org)
@@ -53,7 +53,7 @@ Please note that the nontumor-tumor threshold corresponds to a FastGlioma score 
 
 # Training, evaluation, and inference
 
-This repository currently supports inference on the [OpenSRH dataset](https://opensrh.mlins.org/), the largest publically available stimulated Raman histology dataset, with FastGlioma models available on [HuggingFace](https://huggingface.co/mlinslab/fastglioma/). Training/evaluation scripts are available in their respective directories.
+This repository currently supports inference on the [OpenSRH dataset](https://opensrh.mlins.org/), the largest publically available stimulated Raman histology dataset, with FastGlioma models available on [HuggingFace](https://huggingface.co/mlinslab/fastglioma/), as well as training/evaluation scripts for developing your own self-supervised SRH foundation models.
 
 ## Directory organization
 ```
@@ -101,18 +101,58 @@ The OpenSRH dataset and FastGlioma models are available for non-commerical use. 
 
 ## Inference
 
-1. Log into Hugging Face
+1. Log into Hugging Face and navigate to the inference directory
     ```console
     huggingface-cli login
+    cd fastglioma/inference
     ```
 2. Specify inference configuration file
     ```console
-    vi fastglioma/inference/config/infer.yaml
+    vi config/infer.yaml
     ```
 3. Generate predictions
     ```console
-    python fastglioma/inference/run_inference.py -c fastglioma/inference/config/infer.yaml
+    python run_inference.py -c config/infer.yaml
     ```
+
+## Training and evaluation
+
+1. Train SRH patch and whole-slide foundation models
+    ```console
+    cd fastglioma/
+
+    # Train/evaluate patch tokenizer
+    python train/train_patch.py -c train/config/train_hidisc.yaml
+    python eval/eval_knn.py -c eval/config/eval_hidisc.yaml
+
+    # Save patch embeddings
+    python eval/save_embedding.py -c eval/config/save_hidisc.yaml
+
+    # Train/evaluate slide transformer
+    python train/train_slide.py -c train/config/train_scm.yaml
+    python eval/eval_knn.py -c eval/config/eval_scm.yaml
+    ```
+
+2. Fine-tune slide foundation model for tumor infiltration scoring
+    ```console
+    python train/train_scorer.py -c train/config/train_ordmet.yaml
+    ```
+
+Note that the OpenSRH dataset only includes patient-level annotations. For training the slide scorer, we include a `slide_class` key for each slide in the metadata, corresponding to the ordinal tumor infiltration label. This can be toggled by setting the `use_patient_class` flag to `False` in the config file.
+```console
+"NIO_001": {
+    "patient_id": "NIO_001",
+    "class": "hgg",
+    "slides": {
+        "1": {
+            "slide_id": "1",
+            "slide_class": "0", # added slide-level tumor infiltration label from 0-3
+            "tumor_patches": ...
+        },
+        ...
+    }
+}
+```
 
 ## License Information
 The code is licensed under the MIT License.
