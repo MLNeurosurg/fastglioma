@@ -81,9 +81,8 @@ class FFPEG(nn.Module):
 
         if return_ff: return f
 
-        pe = self._mlp(f).reshape(n, self.embed_dim_).unsqueeze(0).repeat(
-            bsz, 1, 1)
-        pe = torch.cat((self.cls_pos_emb, pe), dim=1)
+        pe = self._mlp(f).reshape(bsz, n, self.embed_dim_)
+        pe = torch.cat((self.cls_pos_emb.repeat(bsz, 1, 1), pe), dim=1)
 
         return H + pe
 
