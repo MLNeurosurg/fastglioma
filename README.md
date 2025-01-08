@@ -66,6 +66,7 @@ fastglioma/
 │   ├── training/       # Training scripts
 │   ├── eval/           # Evaluation scripts
 │   ├── inference/      # Inference scripts
+│   ├── tf/             # TensorFlow implementation/inference scripts
 ├── figures/            # Figures in the README file
 ├── THIRD_PARTY         # License information for third party code   
 ├── setup.py            # Setup file including list of dependencies
